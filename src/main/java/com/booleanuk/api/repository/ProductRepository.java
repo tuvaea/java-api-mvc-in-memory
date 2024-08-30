@@ -42,9 +42,9 @@ public class ProductRepository {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found."));
     }
 
-    public Boolean nameExists(String name){
+    public Boolean nameExists(String name, int id){
         for (Product product : products){
-            if(product.getName().equals(name)){
+            if(product.getName().equals(name) && id != product.getId()){
                 return true;
             }
         }
@@ -52,7 +52,7 @@ public class ProductRepository {
     }
 
     public void addProduct(Product product){
-        if (nameExists(product.getName())){
+        if (nameExists(product.getName(), product.getId())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists.");
         }
         products.add(product);
@@ -69,7 +69,7 @@ public class ProductRepository {
 
     public Product edit(int id, Product newProduct){
         Product product = this.getOne(id);
-        if (nameExists(newProduct.getName())){
+        if (nameExists(newProduct.getName(), id)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product with provided name already exists.");
         }
         product.setName(newProduct.getName());
