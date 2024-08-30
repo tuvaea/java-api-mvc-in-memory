@@ -24,8 +24,11 @@ public class ProductController {
     }
 
     @GetMapping
-    public ArrayList<Product> getProducts(){
-        return productRepo.getAll();
+    public ArrayList<Product> getProducts(@RequestParam(required = false) String cat){
+        if (cat == null){
+            return productRepo.getAll();
+        }
+        return productRepo.getAll(cat);
     }
 
     @GetMapping("{id}")
